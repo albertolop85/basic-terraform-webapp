@@ -21,3 +21,16 @@ resource "aws_ecs_service" "webapp_service" {
   task_definition = "${aws_ecs_task_definition.webapp_task_def.arn}"
   desired_count = 1
 }
+
+resource "aws_instance" "webapp_instance" {
+  ami = "ami-07eb698ce660402d2"
+  instance_type = "t2.micro"
+  user_data = <<EOF
+  #!/bin/bash
+  # This script implements initial configuration via the
+  # AWS user_data field
+
+  # Set ECS cluster name
+  echo ECS_CLUSTER="${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
+  EOF
+}
