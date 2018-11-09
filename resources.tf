@@ -34,10 +34,10 @@ resource "aws_iam_role" "webapp_instance_role" {
 EOF
 }
 
-#resource "aws_iam_instance_profile" "webapp_instance_profile" {
-#  name = "webapp_instance_profile"
-#  role = "${aws_iam_role.webapp_instance_role.name}"
-#}
+resource "aws_iam_instance_profile" "webapp_instance_profile" {
+  name = "webapp_instance_profile"
+  role = "${aws_iam_role.webapp_instance_role.name}"
+}
 
 resource "aws_ecs_service" "webapp_service" {
   name = "${var.ecs_service_name}"
@@ -49,7 +49,7 @@ resource "aws_ecs_service" "webapp_service" {
 resource "aws_instance" "webapp_instance" {
   ami = "ami-07eb698ce660402d2"
   instance_type = "t2.micro"
-  iam_instance_profile = "${aws_iam_role.webapp_instance_role.name}"
+  iam_instance_profile = "${aws_iam_instance_profile.webapp_instance_profile.name}"
   user_data = <<EOF
   #!/bin/bash
   # This script implements initial configuration via the
