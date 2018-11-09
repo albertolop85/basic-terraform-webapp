@@ -19,4 +19,5 @@ resource "aws_ecs_service" "webapp_service" {
   name = "${var.ecs_service_name}"
   cluster = "${aws_ecs_cluster.webapp_cluster.id}"
   task_definition = "${aws_ecs_task_definition.webapp_task_def.arn}"
+  desired_count = 1
 }
