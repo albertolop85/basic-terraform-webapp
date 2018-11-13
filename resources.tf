@@ -39,11 +39,54 @@ resource "aws_iam_instance_profile" "webapp_instance_profile" {
   role = "${aws_iam_role.webapp_instance_role.name}"
 }
 
+resource "aws_alb" "webapp_alb" {
+  name = "webapp-alb"
+  //subnets = ["${data.aws_subnet_ids.webapp_subnets.ids}"]
+  subnets = ["${data.aws_subnet_ids.webapp_subnets.ids[0]}", "${data.aws_subnet_ids.webapp_subnets.ids[1]}"]
+}
+
+data "aws_subnet_ids" "webapp_subnets" {
+  vpc_id = "${var.vpc_id}"
+}
+
+resource "aws_alb_target_group" "webapp_lb_target_group" {
+  name = "webapp-lb-target-group"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = "${var.vpc_id}"
+
+  depends_on = [
+    "aws_alb.webapp_alb"
+  ]
+}
+
+resource "aws_lb_listener" "webapp_lb_listener" {
+  load_balancer_arn = "${aws_alb.webapp_alb.arn}"
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_alb_target_group.webapp_lb_target_group.arn}"
+  }
+}
+
 resource "aws_ecs_service" "webapp_service" {
   name = "${var.ecs_service_name}"
   cluster = "${aws_ecs_cluster.webapp_cluster.id}"
   task_definition = "${aws_ecs_task_definition.webapp_task_def.arn}"
   desired_count = 1
+  #iam_role = "${aws_iam_role.webapp_instance_role.arn}"
+  depends_on = [
+    "aws_iam_role_policy_attachment.AmazonEC2ContainerServiceforEC2Role",
+    "aws_alb_target_group.webapp_lb_target_group"
+  ]
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.webapp_lb_target_group.arn}"
+    container_name =  "webapp"
+    container_port = "8090"
+  }
 }
 
 resource "aws_instance" "webapp_instance" {
@@ -64,4 +107,24 @@ EOF
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
   role = "${aws_iam_role.webapp_instance_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_security_group" "webapp-security-group" {
+  vpc_id = "${var.vpc_id}"
+  name = "webapp-security-group"
+  description = "Allow HTTP traffic from Internet"
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
