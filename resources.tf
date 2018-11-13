@@ -39,22 +39,21 @@ resource "aws_iam_instance_profile" "webapp_instance_profile" {
   role = "${aws_iam_role.webapp_instance_role.name}"
 }
 
-
-
 resource "aws_alb" "webapp_alb" {
   name = "webapp-alb"
-  subnets = ["${data.aws_subnet_ids.webapp_subnets.ids}"]
+  //subnets = ["${data.aws_subnet_ids.webapp_subnets.ids}"]
+  subnets = ["${data.aws_subnet_ids.webapp_subnets.ids[0]}", "${data.aws_subnet_ids.webapp_subnets.ids[1]}"]
 }
 
 data "aws_subnet_ids" "webapp_subnets" {
-  vpc_id = "vpc-0d92d2d69f9568bd8"
+  vpc_id = "${var.vpc_id}"
 }
 
 resource "aws_alb_target_group" "webapp_lb_target_group" {
   name = "webapp-lb-target-group"
   port = 80
   protocol = "HTTP"
-  vpc_id = "vpc-0d92d2d69f9568bd8" #"${aws_vpc.webapp_vpc.id}"
+  vpc_id = "${var.vpc_id}"
 
   depends_on = [
     "aws_alb.webapp_alb"
@@ -108,4 +107,24 @@ EOF
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
   role = "${aws_iam_role.webapp_instance_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_security_group" "webapp-security-group" {
+  vpc_id = "${var.vpc_id}"
+  name = "webapp-security-group"
+  description = "Allow HTTP traffic from Internet"
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

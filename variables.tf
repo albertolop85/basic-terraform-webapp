@@ -9,3 +9,7 @@ variable "ecs_service_name" {}
 variable "region" {
   default = "us-east-1"
 }
+
+variable vpc_id {
+  default = "vpc-0d92d2d69f9568bd8"
+}
