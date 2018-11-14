@@ -1,4 +1,7 @@
 ecs_cluster_name = "webapp-cluster-dev"
 ecs_service_name = "webapp-service-dev"
+alb_name = "webapp-alb-dev"
+alb_target_group_name = "webapp-lb-target-group-dev"
 instance_role_name = "webapp-instance-role-dev"
 security_group_name = "webapp-security-group-dev"
+instance_profile_name = "webapp_instance_profile-dev"

@@ -6,9 +6,15 @@ variable "ecs_cluster_name" {}
 
 variable "ecs_service_name" {}
 
+variable "alb_name" {}
+
+variable "alb_target_group_name" {}
+
 variable "instance_role_name" {}
 
 variable "security_group_name" {}
+
+variable "instance_profile_name" {}
 
 variable "region" {
   default = "us-east-1"

@@ -35,12 +35,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "webapp_instance_profile" {
-  name = "webapp_instance_profile"
+  name = "${var.instance_profile_name}"
   role = "${aws_iam_role.webapp_instance_role.name}"
 }
 
 resource "aws_alb" "webapp_alb" {
-  name = "webapp-alb"
+  name = "${var.alb_name}"
   //subnets = ["${data.aws_subnet_ids.webapp_subnets.ids}"]
   subnets = ["${data.aws_subnet_ids.webapp_subnets.ids[0]}", "${data.aws_subnet_ids.webapp_subnets.ids[1]}"]
 }
@@ -50,7 +50,7 @@ data "aws_subnet_ids" "webapp_subnets" {
 }
 
 resource "aws_alb_target_group" "webapp_lb_target_group" {
-  name = "webapp-lb-target-group"
+  name = "${var.alb_target_group_name}"
   port = 80
   protocol = "HTTP"
   vpc_id = "${var.vpc_id}"

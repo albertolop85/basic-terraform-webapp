@@ -1,4 +1,7 @@
 ecs_cluster_name = "webapp-cluster-qa"
 ecs_service_name = "webapp-service-qa"
+alb_name = "webapp-alb-qa"
+alb_target_group_name = "webapp-lb-target-group-qa"
 instance_role_name = "webapp-instance-role-qa"
 security_group_name = "webapp-security-group-qa"
+instance_profile_name = "webapp_instance_profile-qa"
