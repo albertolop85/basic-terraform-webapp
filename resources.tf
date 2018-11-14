@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "webapp_task_def" {
 }
 
 resource "aws_iam_role" "webapp_instance_role" {
-  name = "webapp_instance_role"
+  name = "${var.instance_role_name}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -109,9 +109,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" 
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
-resource "aws_security_group" "webapp-security-group" {
+resource "aws_security_group" "webapp_security_group" {
   vpc_id = "${var.vpc_id}"
-  name = "webapp-security-group"
+  name = "${var.security_group_name}"
   description = "Allow HTTP traffic from Internet"
 
   ingress {
