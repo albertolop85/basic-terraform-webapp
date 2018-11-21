@@ -14,8 +14,8 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "${var.aws_logs_group_name}",
-          "awslogs-region": "${var.region}"
+          "awslogs-group": "webapp-logs",
+          "awslogs-region": "us-east-1"
         }
       }
   }
