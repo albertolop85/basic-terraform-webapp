@@ -10,6 +10,9 @@
           "containerPort": 8090,
           "hostPort": 80
         }
-      ]
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs"
+      }
   }
 ]
