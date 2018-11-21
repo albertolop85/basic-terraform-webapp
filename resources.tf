@@ -129,5 +129,5 @@ resource "aws_security_group" "webapp_security_group" {
 }
 
 resource "aws_cloudwatch_log_group" "webapp_log_group" {
-  name = "webapp_logs"
+  name = "webapp-logs"
 }
