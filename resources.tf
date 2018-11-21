@@ -54,6 +54,13 @@ resource "aws_alb_target_group" "webapp_lb_target_group" {
   protocol = "HTTP"
   vpc_id = "${var.vpc_id}"
 
+  health_check {
+    interval = 15
+    protocol = "HTTP"
+    healthy_threshold = 2
+    unhealthy_threshold = 5
+  }
+
   depends_on = [
     "aws_alb.webapp_alb"
   ]
