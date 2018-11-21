@@ -12,7 +12,11 @@
         }
       ],
       "logConfiguration": {
-        "logDriver": "awslogs"
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${var.aws_logs_group_name}",
+          "awslogs-region": "${var.region}"
+        }
       }
   }
 ]
