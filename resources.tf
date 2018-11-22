@@ -41,7 +41,8 @@ resource "aws_iam_instance_profile" "webapp_instance_profile" {
 
 resource "aws_alb" "webapp_alb" {
   name = "${var.alb_name}"
-  subnets = ["${data.aws_subnet_ids.webapp_subnets.ids[0]}", "${data.aws_subnet_ids.webapp_subnets.ids[1]}"]
+  subnets = ["${data.aws_subnet_ids.webapp_subnets.ids}"]
+  #subnets = ["${data.aws_subnet_ids.webapp_subnets.ids[0]}", "${data.aws_subnet_ids.webapp_subnets.ids[1]}"]
 }
 
 data "aws_subnet_ids" "webapp_subnets" {
