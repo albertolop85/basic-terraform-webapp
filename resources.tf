@@ -57,8 +57,8 @@ resource "aws_alb_target_group" "webapp_lb_target_group" {
   health_check {
     interval = 30
     protocol = "HTTP"
-    healthy_threshold = 10
-    unhealthy_threshold = 10
+    healthy_threshold = 5
+    unhealthy_threshold = 5
   }
 
   depends_on = [
