@@ -1,0 +1,22 @@
+[
+  {
+      "name": "webapp-qa",
+      "image": "albertolop/springboot-sample:latest",
+      "cpu": 10,
+      "memory": 512,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8090,
+          "hostPort": 80
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "webapp-logs-qa",
+          "awslogs-region": "us-east-1"
+        }
+      }
+  }
+]

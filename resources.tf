@@ -12,7 +12,7 @@ resource "aws_ecs_cluster" "webapp_cluster" {
 
 resource "aws_ecs_task_definition" "webapp_task_def" {
   family = "webapp-task-definition"
-  container_definitions = "${file("task-definitions/webapp.json")}"
+  container_definitions = "${file("task-definitions/${var.task_definition_name}.json")}"
 }
 
 resource "aws_iam_role" "webapp_instance_role" {
@@ -90,7 +90,7 @@ resource "aws_ecs_service" "webapp_service" {
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.webapp_lb_target_group.arn}"
-    container_name =  "webapp"
+    container_name =  "${var.task_definition_name}"
     container_port = "8090"
   }
 }
@@ -136,5 +136,5 @@ resource "aws_security_group" "webapp_security_group" {
 }
 
 resource "aws_cloudwatch_log_group" "webapp_log_group" {
-  name = "webapp-logs"
+  name = "${var.aws_logs_group_name}"
 }

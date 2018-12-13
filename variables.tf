@@ -18,6 +18,8 @@ variable "instance_profile_name" {}
 
 variable "aws_logs_group_name" {}
 
+variable "task_definition_name" {}
+
 variable "region" {
   default = "us-east-1"
 }
